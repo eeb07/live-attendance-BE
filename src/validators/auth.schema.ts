@@ -1,0 +1,10 @@
+import * as z from "zod"
+
+const signupSchema = z.object({
+    name: z.string().min(1, "Name should be atleast 1 character"), 
+    email: z.string().email(), 
+    password: z.string().min(6, "password should have minimum six characters"), 
+    role: z.enum(["teacher", "student"])
+})
+
+export default signupSchema;
