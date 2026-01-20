@@ -2,11 +2,9 @@
 import bcrypt from 'bcrypt';
 
 import type { Request, Response } from 'express';
-import { signupSchema, loginSchema } from '../validators/auth.schema.js';
+import { loginSchema, signupSchema } from '../validators/auth.schema.js';
 import User from '../models/user.js';
 import jwt from 'jsonwebtoken';
-import dotenv from "dotenv"
-import { success } from 'zod';
 
 
 const JWT_PASSWORD = process.env.JWT_PASSWORD as string;
@@ -57,6 +55,14 @@ export const loginController = async (req: Request, res: Response) => {
 
     const email = req.body.email;
     const password = req.body.password;
+    const parsed = loginSchema.safeParse(req.body)
+    if (!parsed.success) {
+        return res.status(400).json({
+            success: false,
+            error: "Invalid request schema"
+        })
+    }
+
     try {
         const existingUser = await User.findOne({
             email
@@ -69,7 +75,8 @@ export const loginController = async (req: Request, res: Response) => {
             if (isPasswordValid) {
 
                 const token = jwt.sign({
-                    id: existingUser._id
+                    userId: existingUser._id,
+                    role: existingUser.role
                 }, JWT_PASSWORD)
                 return res.status(200).json({
                     success: true,
@@ -79,15 +86,48 @@ export const loginController = async (req: Request, res: Response) => {
                 })
             }
 
-           
+
         } else {
-                return res.status(400).json({
-                    success: false,
-                    error: "Invalid email or password"
+            return res.status(400).json({
+                success: false,
+                error: "Invalid email or password"
 
-                })
-            }
+            })
+        }
 
+    } catch (error) {
+        res.json({
+            message: "error while fetching details "
+        })
+
+    }
+};
+
+export const meController = async (req: Request, res: Response) => {
+ 
+    const userId = (req as any).user.userId;
+
+
+    try {
+        const existingUser = await User.findById(userId)
+        if (!existingUser) {
+            res.status(404).json({
+                success: false,
+                error: "User not found "
+            })
+
+        }
+        else {
+            return res.status(200).json({
+                success: true,
+                data: {
+                    _id: existingUser?._id,
+                    name: existingUser?.name,
+                    email: existingUser?.email,
+                    role: existingUser?.role
+                }
+            })
+        }
     } catch (error) {
         res.json({
             message: "error while fetching details "
@@ -96,6 +136,5 @@ export const loginController = async (req: Request, res: Response) => {
     }
 
 
+
 }
-
-

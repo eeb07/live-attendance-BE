@@ -1,5 +1,5 @@
 import express from 'express'; 
-import { loginController, signupController } from '../controller/auth.controller.js';
+import { loginController, signupController, meController } from '../controller/auth.controller.js';
 import { loginSchema } from '../validators/auth.schema.js';
 
 const app = express();
@@ -13,6 +13,7 @@ router.post("/signup", signupController)
 
 //
 router.post("/login", loginController)
+router.get("/me", meController)
 
 export default router;
 
