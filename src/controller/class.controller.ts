@@ -6,6 +6,7 @@ import Class from '../models/class.js';
 export const classController = async (req: Request, res:Response)=>{
 
     const parseDataSuccess = classSchema.safeParse(req.body);
+    console.log("hello from class Controller")
     if(!parseDataSuccess.success){
        return res.status(400).json({
             success: false, 
