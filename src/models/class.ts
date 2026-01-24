@@ -1,13 +1,13 @@
-import { model, Schema, type ObjectId } from "mongoose";
+import { model, Schema, Types, type ObjectId } from "mongoose";
 
 interface IClass{
     className: string, 
     teacherId: ObjectId,
-    studentIds: ObjectId[]
+    studentIds: Types.ObjectId[]
 
 }
 
-const classSchema = new Schema<IClass>({
+const createClassSchema = new Schema<IClass>({
     className: { type: String, required: true
     },
     teacherId: {
@@ -23,6 +23,6 @@ const classSchema = new Schema<IClass>({
     }]
 })
 
-const Class = model<IClass>("Class", classSchema);
+const Class = model<IClass>("Class", createClassSchema);
 
 export default Class;
