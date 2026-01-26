@@ -1,8 +1,7 @@
 import express from 'express'; 
 import { loginController, signupController, meController } from '../controller/auth.controller.js';
-import { loginSchema } from '../validators/auth.schema.js';
 import { authMiddleware } from '../middleware/auth.middleware.js';
-import { addStudentController, classController, getClassController } from '../controller/class.controller.js';
+import { addStudentController, classController, getClassController, getStudentsController } from '../controller/class.controller.js';
 
 const app = express();
 app.use(express.json())
@@ -17,6 +16,7 @@ router.get("/me", authMiddleware , meController)
 router.post("/class",authMiddleware, classController)
 router.post("/class/:id/add-student", authMiddleware, addStudentController)
 router.get("/class/:id",authMiddleware,getClassController)
+router.get("/students", authMiddleware, getStudentsController)
 
 export default router;
 
