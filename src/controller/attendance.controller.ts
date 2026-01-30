@@ -2,7 +2,8 @@
 import type {Request, Response} from  'express';
 import { activeAttendanceSchema } from '../validators/attendance.schema.js';
 import Class from '../models/class.js';
-import { id } from 'zod/locales';
+import {sessionActive}  from '../state/activeSession.js';
+
 
 export const startAttendanceController = async (req:Request, res: Response)=> {
     const {userId, role } = (req as any).user;
@@ -14,7 +15,7 @@ export const startAttendanceController = async (req:Request, res: Response)=> {
             error: "Forbidden, teachers access only"
         });
     };
-    const parsedData = activeAttendanceSchema.safeParse(req.body)
+    const parsedData = activeAttendanceSchema.safeParse(req.body);
     if(!parsedData.success){
         return res.status(400).json({
             success: false, 
@@ -39,4 +40,24 @@ export const startAttendanceController = async (req:Request, res: Response)=> {
 
     }
 
+    sessionActive.activeSession = {
+        classId: parsedData.data.classId, 
+        startedAt: new Date().toISOString(), 
+        attendance: {}
+    }
+    return res.status(200).json({
+        success: true, 
+        data: {
+            classId : sessionActive.activeSession.classId, 
+            startedAt: sessionActive.activeSession.startedAt
+        }
+    });
+
+
+        
+    
+
 }
+
+
+
