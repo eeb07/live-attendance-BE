@@ -1,10 +1,7 @@
 import type { Request, Response } from 'express'
 import { addStudentSchema, classSchema } from '../validators/class.schema.js';
 import Class from '../models/class.js';
-import mongoose from 'mongoose';
 import User from "../models/user.js";
-import { email, success } from 'zod';
-import { id } from 'zod/locales';
 
 
 export const classController = async (req: Request, res: Response) => {

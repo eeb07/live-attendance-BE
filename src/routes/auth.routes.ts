@@ -2,6 +2,7 @@ import express from 'express';
 import { loginController, signupController, meController } from '../controller/auth.controller.js';
 import { authMiddleware } from '../middleware/auth.middleware.js';
 import { addStudentController, classController, getClassController, getStudentsController } from '../controller/class.controller.js';
+import { startAttendanceController } from '../controller/attendance.controller.js';
 
 const app = express();
 app.use(express.json())
@@ -17,6 +18,7 @@ router.post("/class",authMiddleware, classController)
 router.post("/class/:id/add-student", authMiddleware, addStudentController)
 router.get("/class/:id",authMiddleware,getClassController)
 router.get("/students", authMiddleware, getStudentsController)
+router.get("/attendance/start", authMiddleware, startAttendanceController )
 
 export default router;
 
