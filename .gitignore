@@ -4,19 +4,4 @@ dist
 
 
 
-
-// extract and validate payload
-
-//     const { studentId, status } = data;
-//     if (!studentId || (status !== "present" && status !== "absent")) {
-//         ws.send(JSON.stringify({
-//             event: "ERROR",
-//             data: { message: "Invalid attendance data" }
-//         }));
-//         return
-//     }
-
-//   
-
-//    
-
+ 
